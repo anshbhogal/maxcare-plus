@@ -1,0 +1,78 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: hms_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USER:-hms_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-hms_password}
+      POSTGRES_DB: ${DB_NAME:-hms_db}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./database/migrations:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-hms_user} -d ${DB_NAME:-hms_db}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: hms_backend
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      PGPASSWORD: ${DB_PASSWORD:-hms_password}
+      PII_ENCRYPTION_KEY: ${PII_ENCRYPTION_KEY:-SrRdYDJ69VaFjTHyMyPjUOSCJVgBcoswWYr5xCFmjdA=}
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    depends_on:
+      db:
+        condition: service_healthy
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  db_backup:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: hms_db_backup
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      PGPASSWORD: ${DB_PASSWORD:-hms_password}
+    volumes:
+      - ./backend:/app
+      - ./backups:/app/backups
+    depends_on:
+      db:
+        condition: service_healthy
+    command: /bin/bash -c "while true; do python3 /app/scripts/backup_db.py; sleep 86400; done"
+
+  symptom_checker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: hms_symptom_checker
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./backend:/app
+    environment:
+      - PYTHONPATH=.
+    command: python3 app/symptom_checker_main.py
+
+volumes:
+  postgres_data:

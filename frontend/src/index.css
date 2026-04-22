@@ -1,0 +1,135 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&family=DM+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  /* Warm Ivory & Cream Theme */
+  --navy:       #fcfbfa; 
+  --navy-2:     #f7f5f0; 
+  --navy-3:     #f2efe9; 
+  
+  --blue:       #1a5fd4;
+  --blue-mid:   #1a8fd4;
+  --green:      #1ad48f;
+  --green-dim:  #0fa86e;
+  
+  --text:       #292524;
+  --text-muted: #57534e;
+  --text-dim:   #78716c;
+  
+  --border:     rgba(41, 37, 36, 0.08);
+  --border-g:   rgba(15, 168, 110, 0.25);
+  --card:       #ffffff;
+  --glass:      rgba(252, 251, 250, 0.85);
+  
+  /* Minimalist Typography */
+  --font-head:  'Plus Jakarta Sans', sans-serif;
+  --font-body:  'DM Sans', sans-serif;
+  --font-mono:  'DM Mono', monospace;
+  
+  --grad:       linear-gradient(135deg, #1a5fd4 0%, #1ad48f 100%);
+  --grad-soft:  linear-gradient(135deg, rgba(26,95,212,0.06) 0%, rgba(26,212,143,0.06) 100%);
+  
+  --shadow-sm:  0 4px 12px rgba(41, 37, 36, 0.02);
+  --shadow-md:  0 12px 36px rgba(41, 37, 36, 0.04);
+  --shadow-lg:  0 24px 48px rgba(41, 37, 36, 0.08);
+  
+  --radius-lg:  20px;
+  --radius-md:  14px;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--navy);
+  color: var(--text);
+  line-height: 1.6;
+  overflow-x: hidden;
+  letter-spacing: -0.01em; /* Tighter letter spacing for minimalist look */
+}
+
+/* ── Grid texture overlay ── */
+.grid-overlay {
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(41, 37, 36, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(41, 37, 36, 0.02) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Ambient glow orbs ── */
+.orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(120px);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.08;
+}
+.orb-1 { width: 600px; height: 600px; background: #1a5fd4; top: -200px; left: -200px; animation: drift1 20s ease-in-out infinite; }
+.orb-2 { width: 500px; height: 500px; background: #1ad48f; bottom: 20%; right: -150px; animation: drift2 25s ease-in-out infinite; }
+.orb-3 { width: 300px; height: 300px; background: #1a8fd4; top: 50%; left: 40%; animation: drift3 18s ease-in-out infinite; }
+
+@keyframes drift1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(60px,40px)} }
+@keyframes drift2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-50px,-60px)} }
+@keyframes drift3 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(40px,-30px)} }
+
+/* ── Minimalist Typography & Components ── */
+h1, h2, h3, h4 { 
+  font-family: var(--font-head); 
+  letter-spacing: -0.04em; /* Minimalist tight tracking */
+  font-weight: 700;
+}
+
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 12px 28px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer; border: none;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  font-family: var(--font-head); /* Minimalist buttons */
+}
+
+.btn-primary { background: var(--grad); color: #fff; box-shadow: 0 8px 20px rgba(26, 95, 212, 0.15); }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(26, 95, 212, 0.2); }
+
+.btn-outline { background: transparent; color: var(--green-dim); border: 1px solid var(--border-g); }
+.btn-outline:hover { background: rgba(26, 212, 143, 0.04); transform: translateY(-1px); }
+
+.glass-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 32px;
+  box-shadow: var(--shadow-md);
+  transition: all 0.4s ease;
+}
+.glass-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+
+.reveal { opacity: 1; transform: none; transition: all 0.8s cubic-bezier(0.17, 0.55, 0.55, 1); }
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border-radius: 100px;
+  background: rgba(26, 95, 212, 0.05);
+  color: var(--blue);
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 16px;
+  font-family: var(--font-head);
+}
+
+.icon { font-family: 'Material Symbols Outlined'; font-size: 24px; vertical-align: middle; }
+
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.4)} }
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+.animate-float { animation: float 6s ease-in-out infinite; }
