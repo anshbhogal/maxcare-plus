@@ -2,14 +2,10 @@ from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    DB_USER: str
-    DB_PASSWORD: str
-    DB_NAME: str
-    DB_HOST: str = "db"
-    DB_PORT: int = 5432
-
+    DATABASE_URL: str
     SECRET_KEY: str
-    PII_ENCRYPTION_KEY: str  # Added for AES-256 encryption of PII
+    PII_ENCRYPTION_KEY: str
+
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
 
@@ -26,13 +22,6 @@ class Settings(BaseSettings):
 
     APP_ENV: str = "development"
     CORS_ORIGINS: str = "http://localhost:5173"
-
-    @property
-    def DATABASE_URL(self) -> str:
-        return (
-            f"postgresql://{self.DB_USER}:{self.DB_PASSWORD}"
-            f"@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
-        )
 
     @property
     def cors_origins_list(self) -> list[str]:
