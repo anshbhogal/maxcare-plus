@@ -9,8 +9,8 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
 
-    # Service Discovery
-    SYMPTOM_CHECKER_URL: str = "http://symptom_checker:8001"
+    # Service Discovery (Point to internal mount)
+    SYMPTOM_CHECKER_URL: str = "http://localhost:8000/ai-service"
 
     # Email SMTP Settings
     SMTP_HOST: str = "smtp.gmail.com"

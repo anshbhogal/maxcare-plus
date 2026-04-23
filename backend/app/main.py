@@ -8,6 +8,7 @@ import os
 from app.core.config import settings
 from app.api.v1.router import api_router
 from app.db.database import Base, engine
+from app.symptom_checker_main import app as ai_app
 
 # ✅ IMPORTANT: correct model import (DO NOT use `import app.models`)
 from app import models  # registers models
@@ -66,6 +67,9 @@ app.add_middleware(
 # 🔌 API Routes
 # ─────────────────────────────────────────────────────────────
 app.include_router(api_router, prefix="/api/v1")
+
+# Mount AI Microservice logic directly into the main app (for Render)
+app.mount("/ai-service", ai_app)
 
 # ─────────────────────────────────────────────────────────────
 # 🏠 Root Endpoint

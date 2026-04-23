@@ -226,8 +226,30 @@ def _get_advice(urgency: str, dept: str) -> str:
 
 
 # ─────────────────────────────────────────────
-# FASTAPI ROUTE
+# FASTAPI ROUTES
 # ─────────────────────────────────────────────
+@router.get("/health")
+async def health_check():
+    """Proxy health check to AI microservice."""
+    try:
+        async with httpx.AsyncClient() as client:
+            response = await client.get(
+                f"{settings.SYMPTOM_CHECKER_URL}/health",
+                timeout=2.0
+            )
+            if response.status_code == 200:
+                return response.json()
+    except Exception:
+        pass
+    
+    return {
+        "status": "warning",
+        "service": "api_gateway",
+        "ml_ready": False,
+        "detail": "AI microservice unreachable"
+    }
+
+
 @router.post("/symptom-check", response_model=SymptomResponse)
 async def symptom_check(req: SymptomRequest):
     if not req.symptoms:
