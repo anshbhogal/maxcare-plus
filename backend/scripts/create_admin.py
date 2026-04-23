@@ -19,7 +19,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 
 from app.db.database import SessionLocal
 from app.models.user import User, UserRole
-from app.core.security import hash_password
+from app.core.security import hash_password, verify_password
 from app.core.encryption import get_blind_index
 
 ADMIN_EMAIL = "admin@maxcare.com"
@@ -30,15 +30,18 @@ def setup_admin():
     try:
         # Search by blind index (PII-compliant)
         email_index = get_blind_index(ADMIN_EMAIL)
+        print(f"[*] Debug - Admin Email: {ADMIN_EMAIL}")
+        print(f"[*] Debug - Generated Index: {email_index}")
+        
         user = db.query(User).filter(User.email_index == email_index).first()
 
         if user:
-            print(f"[*] Admin user already exists ({ADMIN_EMAIL}). Updating password and role...")
+            print(f"[*] Admin user already exists. Updating password and role...")
             user.password_hash = hash_password(ADMIN_PASSWORD)
             user.role = UserRole.admin
             user.is_active = True
         else:
-            print(f"[*] Creating new admin user: {ADMIN_EMAIL}...")
+            print(f"[*] Creating new admin user...")
             user = User(
                 email=ADMIN_EMAIL,
                 password_hash=hash_password(ADMIN_PASSWORD),
@@ -48,10 +51,17 @@ def setup_admin():
             db.add(user)
         
         db.commit()
+        
+        # Verify creation/update
+        db.refresh(user)
+        is_pass_valid = verify_password(ADMIN_PASSWORD, user.password_hash)
+        
         print("✅ Admin setup successfully!")
-        print(f"   Email:    {ADMIN_EMAIL}")
-        print(f"   Password: {ADMIN_PASSWORD}")
-        print(f"   Role:     {UserRole.admin}")
+        print(f"   Email:         {ADMIN_EMAIL}")
+        print(f"   Password:      {ADMIN_PASSWORD}")
+        print(f"   Role:          {user.role}")
+        print(f"   Password Valid: {is_pass_valid}")
+        print(f"   User ID:       {user.id}")
 
     except Exception as e:
         db.rollback()

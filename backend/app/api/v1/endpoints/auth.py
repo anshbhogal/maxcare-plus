@@ -47,7 +47,15 @@ def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
     Login with email OR employee_id (for doctors) + password.
     Returns JWT token with role embedded.
     """
-    user = _find_user_by_login(form_data.username, db)
+    identifier = form_data.username.lower().strip()
+    email_index = get_blind_index(identifier)
+    
+    print(f"DEBUG: Login attempt identifier: '{form_data.username}'")
+    print(f"DEBUG: Normalized identifier: '{identifier}'")
+    print(f"DEBUG: Generated index: {email_index}")
+
+    user = _find_user_by_login(identifier, db)
+    print(f"DEBUG: User found: {user}")
 
     if not user or not verify_password(form_data.password, user.password_hash):
         raise HTTPException(
