@@ -202,11 +202,8 @@ export default function Login() {
             )}
 
             {resetStep === 0 && (
-              <div style={{ borderTop: '1px solid rgba(26,95,212,0.15)', marginTop: 22, paddingTop: 18 }}>
-                <div style={{ fontSize: 11, fontWeight: 700, color: '#3d5270', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8 }}>Default Credentials</div>
-                <div style={{ fontSize: 13, color: '#7b8fa8', lineHeight: 2 }}>
-                  <div>Admin: <span style={{ color: '#e8edf5', fontFamily: 'monospace' }}>admin@hms.local</span> / <span style={{ fontFamily: 'monospace', color: '#e8edf5' }}>Admin@123</span></div>
-                </div>
+              <div style={{ marginTop: 22, textAlign: 'center' }}>
+                <p style={{ fontSize: 13, color: '#3d5270' }}>Securely encrypted access for authorized personnel only.</p>
               </div>
             )}
           </div>

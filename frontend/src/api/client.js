@@ -8,7 +8,7 @@ const api = axios.create({ baseURL })
 // ── Request: attach JWT ───────────────────────────────────────────────────────
 api.interceptors.request.use(
   cfg => {
-    const token = localStorage.getItem('hms_token')
+    const token = localStorage.getItem('maxcare_token')
     if (token) cfg.headers.Authorization = `Bearer ${token}`
     return cfg
   },
@@ -27,8 +27,8 @@ api.interceptors.response.use(
     if ((status === 401 || status === 403) && !isLoginRequest && !isRedirecting) {
       isRedirecting = true
       // Wipe ALL stored auth state
-      localStorage.removeItem('hms_token')
-      localStorage.removeItem('hms_user')
+      localStorage.removeItem('maxcare_token')
+      localStorage.removeItem('maxcare_user')
       // Only redirect if not already on login page
       if (!window.location.pathname.includes('/login')) {
         window.location.href = '/login'

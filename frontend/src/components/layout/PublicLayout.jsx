@@ -124,13 +124,15 @@ export default function PublicLayout({ children }) {
           </div>
         </div>
         
-        <div style={{ maxWidth: 1200, margin: '40px auto 0', paddingTop: 24, borderTop: '1px solid var(--border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', color: 'var(--text-dim)', fontSize: 12 }}>
-          <span>© 2026 MaxCare+ — All Rights Reserved.</span>
-          <div style={{ fontWeight: 600 }}>
+        <div style={{ maxWidth: 1200, margin: '40px auto 0', paddingTop: 24, borderTop: '1px solid var(--border)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, color: 'var(--text-dim)', fontSize: 12 }}>
+          <div style={{ fontWeight: 600, fontSize: 13 }}>
             Developed by - <span style={{ color: 'var(--blue)' }}>Ansh Bhogal</span>
           </div>
-          <div style={{ display: 'flex', gap: 16 }}>
-            <a href="#" style={{ color: 'inherit', textDecoration: 'none' }}>Privacy Policy</a>
+          <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
+            <span>© 2026 MaxCare+ — All Rights Reserved.</span>
+            <div style={{ display: 'flex', gap: 16 }}>
+              <a href="#" style={{ color: 'inherit', textDecoration: 'none' }}>Privacy Policy</a>
+            </div>
           </div>
         </div>
       </footer>

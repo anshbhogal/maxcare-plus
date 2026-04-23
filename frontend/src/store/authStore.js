@@ -6,14 +6,14 @@ export const useAuthStore = create(persist(
     token: null,
     user: null,
     login: (token, user) => {
-      localStorage.setItem('hms_token', token)
+      localStorage.setItem('maxcare_token', token)
       set({ token, user })
     },
     logout: () => {
-      localStorage.removeItem('hms_token')
+      localStorage.removeItem('maxcare_token')
       set({ token: null, user: null })
     },
     updateUser: (updates) => set(state => ({ user: { ...state.user, ...updates } })),
   }),
-  { name: 'hms_user' }
+  { name: 'maxcare_user' }
 ))
