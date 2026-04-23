@@ -230,24 +230,23 @@ def _get_advice(urgency: str, dept: str) -> str:
 # ─────────────────────────────────────────────
 @router.get("/health")
 async def health_check():
-    """Proxy health check to AI microservice."""
+    """Check AI status directly."""
     try:
-        async with httpx.AsyncClient() as client:
-            response = await client.get(
-                f"{settings.SYMPTOM_CHECKER_URL}/health",
-                timeout=2.0
-            )
-            if response.status_code == 200:
-                return response.json()
-    except Exception:
-        pass
-    
-    return {
-        "status": "warning",
-        "service": "api_gateway",
-        "ml_ready": False,
-        "detail": "AI microservice unreachable"
-    }
+        from app.ml.predictors.disease_predictor import get_predictor
+        p = get_predictor()
+        return {
+            "status": "ok",
+            "service": "api_gateway_direct",
+            "ml_ready": p._ready,
+            "n_classes": p.model_meta.get("n_classes", 0),
+            "n_train": p.model_meta.get("n_train", 0)
+        }
+    except Exception as e:
+        return {
+            "status": "error",
+            "ml_ready": False,
+            "detail": str(e)
+        }
 
 
 @router.post("/symptom-check", response_model=SymptomResponse)
@@ -255,22 +254,48 @@ async def symptom_check(req: SymptomRequest):
     if not req.symptoms:
         raise HTTPException(status_code=400, detail="No symptoms provided")
 
-    # Try microservice first (DDXPlus-powered), fall back to local rule engine
     try:
-        async with httpx.AsyncClient() as client:
-            response = await client.post(
-                f"{settings.SYMPTOM_CHECKER_URL}/analyze",
-                json=req.model_dump(),
-                timeout=10.0,
-            )
-            if response.status_code == 200:
-                logger.info("Symptom analysis handled by AI microservice.")
-                return response.json()
-    except Exception as e:
-        logger.warning(f"AI microservice unavailable, using local engine: {e}")
+        # ── Layer 1: Rule engine (source of truth) ────────────────────────────
+        result       = analyze_symptoms(req)
+        rule_urgency = result.get("urgency", "low")
 
-    try:
-        return analyze_symptoms(req)
+        # ── Layer 2: DDXPlus ML (insight layer) ───────────────────────────────
+        try:
+            from app.symptom_checker_main import translate_for_ddxplus
+            from app.ml.predictors.disease_predictor import get_ml_prediction
+            
+            ddx_symptoms = translate_for_ddxplus(req.symptoms)
+            ml_result    = get_ml_prediction(ddx_symptoms)
+            
+            if ml_result and not ml_result.get("suppressed"):
+                predictions  = ml_result.get("predictions", [])
+                ml_urgency   = ml_result.get("predicted_urgency", "low")
+
+                URGENCY_RANK = {"low": 0, "medium": 1, "high": 2}
+                if URGENCY_RANK.get(ml_urgency, 0) > URGENCY_RANK.get(rule_urgency, 0):
+                    result["urgency"] = ml_urgency
+
+                existing = {c.lower() for c in result.get("possible_conditions", [])}
+                for pred in predictions[:3]:
+                    if pred["confidence"] >= 0.45:
+                        disease = pred["disease"]
+                        label   = f"{disease} (DDX {pred['confidence']:.0%})"
+                        if disease.lower() not in existing:
+                            result["possible_conditions"].append(label)
+                            existing.add(disease.lower())
+
+                if ml_result.get("differential"):
+                    diff_str = ", ".join(ml_result["differential"][:3])
+                    result["reasoning"] = (
+                        result.get("reasoning", "").rstrip()
+                        + f" DDXPlus differential: {diff_str}."
+                    )
+                result["ml_prediction"] = ml_result
+        except Exception as e:
+            logger.warning(f"ML enrichment failed: {e}")
+
+        return result
+
     except Exception as e:
-        logger.error(f"Local symptom check error: {e}")
+        logger.error(f"Symptom check error: {e}")
         raise HTTPException(status_code=500, detail="Analysis engine failure")

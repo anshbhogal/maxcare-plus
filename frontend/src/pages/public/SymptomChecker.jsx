@@ -581,11 +581,17 @@ export default function SymptomChecker() {
   const [ddxReady,          setDdxReady]          = useState(false)
 
   const messagesEndRef = useRef(null)
+  const chatWindowRef  = useRef(null)
   const inputRef       = useRef(null)
 
-  // Scroll to bottom on new message
+  // Scroll to bottom on new message (Surgical scroll - only inside chat window)
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+    if (chatWindowRef.current) {
+      chatWindowRef.current.scrollTo({
+        top: chatWindowRef.current.scrollHeight,
+        behavior: "smooth"
+      })
+    }
   }, [messages])
 
   // Check DDXPlus health on mount
@@ -890,14 +896,18 @@ export default function SymptomChecker() {
             </div>
 
             {/* Message window */}
-            <div style={{
-              background:   "var(--navy-2)",
-              border:       "1px solid var(--border)",
-              borderRadius: "16px",
-              padding:      "20px",
-              height:       "500px",
-              overflowY:    "auto",
-            }}>
+            <div 
+              ref={chatWindowRef}
+              style={{
+                background:   "var(--navy-2)",
+                border:       "1px solid var(--border)",
+                borderRadius: "16px",
+                padding:      "20px",
+                height:       "420px",
+                overflowY:    "auto",
+                scrollBehavior: "smooth"
+              }}
+            >
               {messages.map(msg => (
                 <ChatBubble
                   key={msg.id}
