@@ -10,7 +10,11 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
 
     # Service Discovery (Point to internal mount)
-    SYMPTOM_CHECKER_URL: str = "http://localhost:8000/ai-service"
+    @property
+    def SYMPTOM_CHECKER_URL(self) -> str:
+        import os
+        port = os.getenv("PORT", "8000")
+        return f"http://localhost:{port}/ai-service"
 
     # Email SMTP Settings
     SMTP_HOST: str = "smtp.gmail.com"

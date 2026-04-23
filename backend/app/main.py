@@ -17,7 +17,6 @@ from app import models  # registers models
 # 🚀 App Initialization
 # ─────────────────────────────────────────────────────────────
 print("🔥 STARTING MAXCARE-PLUS BACKEND")
-print("DATABASE_URL =", os.getenv("DATABASE_URL"))
 
 app = FastAPI(
     title="MaxCare+ Hospital API",
