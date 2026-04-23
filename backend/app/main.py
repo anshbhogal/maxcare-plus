@@ -10,6 +10,20 @@ print("🔥 STARTING MAXCARE-PLUS BACKEND")
 print("DATABASE_URL =", os.getenv("DATABASE_URL"))
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+origins = [
+    "https://maxcare-plus.onrender.com",  # your frontend
+    "http://localhost:5173",              # local dev (Vite)
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app = FastAPI()
 
