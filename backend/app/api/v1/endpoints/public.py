@@ -214,7 +214,7 @@ def public_appointment_request(data: PublicAppointmentRequest, db: Session = Dep
         except Exception as te:
             logger.warning(f"Time parse failed for '{data.preferred_time}': {te} — defaulting to 09:00")
 
-        # ── Step 4: Conflict Check (Critical for Concurrency) ─────────────────
+        # ── Step 4: Conflict Check (Informational) ────────────────────────────
         conflict = db.query(Appointment).filter(
             Appointment.doctor_id == doctor.id,
             Appointment.appointment_date == data.preferred_date,
@@ -222,24 +222,19 @@ def public_appointment_request(data: PublicAppointmentRequest, db: Session = Dep
             Appointment.status != AppointmentStatus.cancelled,
         ).first()
 
-        if conflict:
-            db.commit() # release lock
-            logger.warning(f"Public booking [{ref}]: Slot {data.preferred_date} {t_obj} already booked for doctor {doctor.full_name}")
-            return PublicAppointmentResponse(
-                success=False,
-                message="The requested time slot is no longer available. Please try another time or date.",
-                reference=None
-            )
+        booking_notes = (
+            f"Website booking. Phone: +91{data.phone}. "
+            f"Preferred: {data.preferred_time}. Ref: {ref}"
+        )
 
-        # ── Step 4.5: Shift Validation ────────────────────────────────────────
+        if conflict:
+            logger.warning(f"Public booking [{ref}]: Slot {data.preferred_date} {t_obj} already booked for doctor {doctor.full_name}")
+            booking_notes += f" | NOTE: Requested slot was already booked."
+
+        # ── Step 4.5: Shift Validation (Informational) ────────────────────────
         if not is_doctor_on_duty(db, doctor.id, data.preferred_date, t_obj):
-            db.commit() # release lock
             logger.warning(f"Public booking [{ref}]: Doctor {doctor.full_name} NOT ON DUTY at {data.preferred_date} {t_obj}")
-            return PublicAppointmentResponse(
-                success=False,
-                message=f"Doctor {doctor.full_name} is not on duty during the requested time ({data.preferred_time}). Please choose another slot.",
-                reference=None
-            )
+            booking_notes += f" | NOTE: Requested outside standard hours - needs admin assignment."
 
         # ── Step 5: Build reason string ───────────────────────────────────────
         reason_parts = [
@@ -258,10 +253,7 @@ def public_appointment_request(data: PublicAppointmentRequest, db: Session = Dep
             slot_time=t_obj,
             status=AppointmentStatus.pending,
             reason=" | ".join(reason_parts),
-            notes=(
-                f"Website booking. Phone: +91{data.phone}. "
-                f"Preferred: {data.preferred_time}. Ref: {ref}"
-            ),
+            notes=booking_notes,
         )
         db.add(appt)
         db.commit()

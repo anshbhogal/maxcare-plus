@@ -59,10 +59,8 @@ function DoctorForm({ initial = {}, onSave, onCancel, loading, error }) {
       </div>
 
       <SectionDivider label="Availability & Fees" />
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 14 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 14 }}>
         <Input label="Consultation Fee (₹)" type="number" value={form.consultation_fee} onChange={e => set('consultation_fee', e.target.value)} placeholder="500" />
-        <Input label="Available Days" value={form.available_days} onChange={e => set('available_days', e.target.value)} placeholder="Mon–Sat" />
-        <Input label="OPD Timings" value={form.available_time} onChange={e => set('available_time', e.target.value)} placeholder="10:00 AM – 1:00 PM" />
       </div>
 
       {error && <Alert type="danger">{error}</Alert>}
@@ -295,8 +293,6 @@ export default function AdminDoctors() {
             <InfoRow label="Mobile" value={viewDoctor.phone ? `+91 ${viewDoctor.phone}` : null} />
             <InfoRow label="Experience" value={viewDoctor.experience_years ? `${viewDoctor.experience_years} years` : null} />
             <InfoRow label="Consultation Fee" value={viewDoctor.consultation_fee ? `₹${viewDoctor.consultation_fee}` : null} />
-            <InfoRow label="Available Days" value={viewDoctor.available_days} />
-            <InfoRow label="OPD Timings" value={viewDoctor.available_time} />
             <InfoRow label="Status" value={viewDoctor.is_available ? 'Active' : 'Inactive'} />
           </div>
         )}
