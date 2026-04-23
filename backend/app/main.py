@@ -5,7 +5,17 @@ from app.api.v1.router import api_router
 from app.db.database import Base, engine
 from sqlalchemy import text
 import logging
+import os
+print("🔥 STARTING MAXCARE-PLUS BACKEND")
+print("DATABASE_URL =", os.getenv("DATABASE_URL"))
 
+from fastapi import FastAPI
+
+app = FastAPI()
+
+@app.get("/")
+def root():
+    return {"status": "MaxCare-Plus running"}
 logging.basicConfig(level=logging.INFO, format="%(levelname)s:\t  %(message)s")
 logger = logging.getLogger(__name__)
 
