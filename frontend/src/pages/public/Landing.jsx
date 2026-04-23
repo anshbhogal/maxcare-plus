@@ -1087,9 +1087,6 @@ export default function Landing() {
               <Link to="/book" className="btn btn-primary" style={{ padding: '18px 60px', fontSize: 18, borderRadius: 14 }}>
                 Book Appointment Now
               </Link>
-              <Link to="/ai-assistant" className="btn btn-outline" style={{ padding: '18px 40px', fontSize: 16, borderRadius: 14 }}>
-                🧠 AI Symptom Check
-              </Link>
             </div>
 
             <div style={{ marginTop: 40, display: 'flex', justifyContent: 'center', gap: 32, flexWrap: 'wrap' }}>
