@@ -1,0 +1,21 @@
+<svg width="400" height="440" viewBox="0 0 40 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Outer Protective Shield -->
+  <path d="M20 2L4 8v14c0 9.4 6.9 18.2 16 20.5C29.1 40.2 36 31.4 36 22V8L20 2z" stroke="url(#mc1)" stroke-width="1.5" fill="none"/>
+  
+  <!-- Lifeline / EKG Trace -->
+  <path d="M8 22h5l3-6 4 12 3-8 2 4h7" stroke="url(#mc2)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  
+  <!-- Care Cross (+) -->
+  <path d="M28 15v4M26 17h4" stroke="url(#mc2)" stroke-width="1.5" stroke-linecap="round"/>
+  
+  <defs>
+    <linearGradient id="mc1" x1="4" y1="2" x2="36" y2="44" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1a5fd4"/>
+      <stop offset="100%" stop-color="#1ad48f"/>
+    </linearGradient>
+    <linearGradient id="mc2" x1="8" y1="15" x2="35" y2="28" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#4a8af4"/>
+      <stop offset="100%" stop-color="#2ae8a0"/>
+    </linearGradient>
+  </defs>
+</svg>
