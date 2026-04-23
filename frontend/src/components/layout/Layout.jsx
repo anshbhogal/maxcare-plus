@@ -205,12 +205,25 @@ export default function Layout({ children }) {
           </div>
         </header>
 
-        <main className="main-content" style={{ flex: 1, padding: '32px', paddingTop: 'calc(32px + 0px)' }}>
+        <main className="main-content" style={{ flex: 1, padding: '32px', paddingTop: 'calc(32px + 0px)', display: 'flex', flexDirection: 'column' }}>
           {/* Top spacer on mobile to clear fixed header */}
           <div className="mobile-header" style={{ display: 'none', height: 64 }} />
-          <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+          <div style={{ maxWidth: 1200, margin: '0 auto', flex: 1, width: '100%' }}>
             {children}
           </div>
+          
+          <footer style={{ 
+            marginTop: 'auto', 
+            paddingTop: '40px', 
+            paddingBottom: '20px', 
+            textAlign: 'center', 
+            fontSize: '13px', 
+            color: 'var(--text-dim)',
+            fontWeight: 600,
+            letterSpacing: '0.02em'
+          }}>
+            Developed by - <span style={{ color: 'var(--blue)' }}>Ansh Bhogal</span>
+          </footer>
         </main>
       </div>
     </div>
