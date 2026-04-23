@@ -1158,8 +1158,10 @@ export default function SymptomChecker() {
               <ActiveModules ddxReady={ddxReady} />
             </div>
           )}
+          </div>{/* end chat column */}
         </div>{/* end main grid */}
       </div>{/* end maxWidth wrapper */}
     </PublicLayout>
   )
 }
+

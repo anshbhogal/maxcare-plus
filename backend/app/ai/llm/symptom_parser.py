@@ -12,8 +12,7 @@ logger = logging.getLogger(__name__)
 
 # ─────────────────────────────────────────────
 # SYMPTOM VOCABULARY
-# Expanded to cover real Indian English expressions
-# Every entry here MUST have a matching key in symptom_checker.py SYMPTOM_ENGINE
+# Every entry here must have a matching key in symptom_checker.py SYMPTOM_ENGINE
 # ─────────────────────────────────────────────
 COMMON_SYMPTOMS = [
     # Cardiology
@@ -32,92 +31,92 @@ COMMON_SYMPTOMS = [
     "skin rash",
     # Ophthalmology
     "blurred vision",
-    # Other common
+    # Other
     "sweating", "loss of appetite", "headache",
 ]
 
 # ─────────────────────────────────────────────
 # SYNONYM MAP
-# Covers colloquial, Indian English, and typo variants
+# Covers colloquial, Indian English, and common typo variants
 # ─────────────────────────────────────────────
 SYNONYM_MAP = {
     # Stomach / GI
-    "stomach pain":         "stomach ache",
-    "tummy ache":           "stomach ache",
-    "tummy pain":           "stomach ache",
-    "belly ache":           "stomach ache",
-    "belly pain":           "stomach ache",
-    "abdominal pain":       "stomach ache",
-    "abdominal ache":       "stomach ache",
-    "stomak pain":          "stomach ache",
-    "my stomach hurts":     "stomach ache",
-    "loose motions":        "diarrhea",
-    "loose stool":          "diarrhea",
-    "loose stools":         "diarrhea",
-    "watery stool":         "diarrhea",
-    "watery motions":       "diarrhea",
-    "motions":              "diarrhea",
-    "loose motion":         "diarrhea",
-    "throw up":             "vomiting",
-    "throwing up":          "vomiting",
-    "puking":               "vomiting",
-    "puke":                 "vomiting",
-    "vomit":                "vomiting",
-    "feel like vomiting":   "nausea",
-    "feel like throwing up":"nausea",
+    "stomach pain":          "stomach ache",
+    "tummy ache":            "stomach ache",
+    "tummy pain":            "stomach ache",
+    "belly ache":            "stomach ache",
+    "belly pain":            "stomach ache",
+    "abdominal pain":        "stomach ache",
+    "abdominal ache":        "stomach ache",
+    "stomak pain":           "stomach ache",
+    "my stomach hurts":      "stomach ache",
+    "loose motions":         "diarrhea",
+    "loose stool":           "diarrhea",
+    "loose stools":          "diarrhea",
+    "watery stool":          "diarrhea",
+    "watery motions":        "diarrhea",
+    "motions":               "diarrhea",
+    "loose motion":          "diarrhea",
+    "throw up":              "vomiting",
+    "throwing up":           "vomiting",
+    "puking":                "vomiting",
+    "puke":                  "vomiting",
+    "vomit":                 "vomiting",
+    "feel like vomiting":    "nausea",
+    "feel like throwing up": "nausea",
 
     # Body / Musculoskeletal
-    "body aches":           "body pain",
-    "body is paining":      "body pain",
-    "whole body pain":      "body pain",
-    "muscle pain":          "body pain",
-    "muscle ache":          "body pain",
-    "muscular pain":        "body pain",
-    "leg pain":             "joint pain",
-    "knee pain":            "joint pain",
-    "arm pain":             "joint pain",
-    "leg is hurting":       "joint pain",
-    "legs are hurting":     "joint pain",
+    "body aches":            "body pain",
+    "body is paining":       "body pain",
+    "whole body pain":       "body pain",
+    "muscle pain":           "body pain",
+    "muscle ache":           "body pain",
+    "muscular pain":         "body pain",
+    "leg pain":              "joint pain",
+    "knee pain":             "joint pain",
+    "arm pain":              "joint pain",
+    "leg is hurting":        "joint pain",
+    "legs are hurting":      "joint pain",
 
     # Head
-    "headache":             "severe headache",
-    "head pain":            "severe headache",
-    "head ache":            "severe headache",
-    "head is paining":      "severe headache",
-    "head hurts":           "severe headache",
-    "migraine":             "severe headache",
+    "headache":              "severe headache",
+    "head pain":             "severe headache",
+    "head ache":             "severe headache",
+    "head is paining":       "severe headache",
+    "head hurts":            "severe headache",
+    "migraine":              "severe headache",
 
     # Breathing
-    "breathless":           "shortness of breath",
-    "breathlessness":       "shortness of breath",
-    "can't breathe":        "shortness of breath",
-    "cannot breathe":       "shortness of breath",
-    "difficulty breathing": "shortness of breath",
-    "trouble breathing":    "shortness of breath",
+    "breathless":            "shortness of breath",
+    "breathlessness":        "shortness of breath",
+    "can't breathe":         "shortness of breath",
+    "cannot breathe":        "shortness of breath",
+    "difficulty breathing":  "shortness of breath",
+    "trouble breathing":     "shortness of breath",
 
     # Fatigue / Weakness
-    "tired":                "fatigue",
-    "tiredness":            "fatigue",
-    "exhausted":            "fatigue",
-    "no energy":            "fatigue",
-    "weak":                 "weakness",
-    "feeling weak":         "weakness",
+    "tired":                 "fatigue",
+    "tiredness":             "fatigue",
+    "exhausted":             "fatigue",
+    "no energy":             "fatigue",
+    "weak":                  "weakness",
+    "feeling weak":          "weakness",
 
     # Temperature / Chills
-    "shivering":            "chills",
-    "rigors":               "chills",
-    "cold chills":          "chills",
-    "feeling cold":         "chills",
-    "high temperature":     "fever",
-    "running temperature":  "fever",
-    "running a fever":      "fever",
-    "high fever":           "fever",
-    "mild fever":           "fever",
-    "slight fever":         "fever",
+    "shivering":             "chills",
+    "rigors":                "chills",
+    "cold chills":           "chills",
+    "feeling cold":          "chills",
+    "high temperature":      "fever",
+    "running temperature":   "fever",
+    "running a fever":       "fever",
+    "high fever":            "fever",
+    "mild fever":            "fever",
+    "slight fever":          "fever",
 
-    # Loss of appetite
-    "not eating":           "loss of appetite",
-    "no appetite":          "loss of appetite",
+    # Appetite
+    "not eating":            "loss of appetite",
+    "no appetite":           "loss of appetite",
     "don't feel like eating":"loss of appetite",
 }
 
@@ -132,14 +131,23 @@ NEGATION_WORDS = {
 }
 
 # ─────────────────────────────────────────────
-# DETAIL EXTRACTION PATTERNS
+# SEVERITY KEYWORDS
+# FIX: "worst" removed — too easily confused with comparative answers
+#      e.g. "eating makes it worse" / "worst I've felt" both triggered HIGH
+#      Users who mean severity is worst will say "10/10", "unbearable", etc.
 # ─────────────────────────────────────────────
-SEVERITY_HIGH   = ["severe", "extremely", "very bad", "unbearable", "terrible",
-                   "excruciating", "10/10", "9/10", "8/10"]
-SEVERITY_MEDIUM = ["moderate", "bad", "medium", "5/10", "6/10", "7/10",
-                   "not great", "quite bad"]
-SEVERITY_LOW    = ["mild", "a little", "slight", "minor", "light",
-                   "1/10", "2/10", "3/10", "4/10", "a bit", "little"]
+SEVERITY_HIGH   = [
+    "severe", "extremely", "very bad", "unbearable", "terrible",
+    "excruciating", "10/10", "9/10", "8/10",
+]
+SEVERITY_MEDIUM = [
+    "moderate", "bad", "medium", "5/10", "6/10", "7/10",
+    "not great", "quite bad",
+]
+SEVERITY_LOW    = [
+    "mild", "a little", "slight", "minor", "light",
+    "1/10", "2/10", "3/10", "4/10", "a bit", "little",
+]
 
 PAIN_SHARP    = ["sharp", "stabbing", "shooting", "piercing", "knife"]
 PAIN_DULL     = ["dull", "achy", "constant", "throbbing"]
@@ -147,7 +155,7 @@ PAIN_PRESSURE = ["pressure", "tight", "squeezing", "crushing", "heavy"]
 
 
 # ─────────────────────────────────────────────
-# CORE HELPERS
+# HELPERS
 # ─────────────────────────────────────────────
 def is_negated(text: str, match_index: int) -> bool:
     """Check the 5 words before the match for negation words."""
@@ -160,15 +168,14 @@ def is_negated(text: str, match_index: int) -> bool:
 
 
 def _check_and_classify(
-    pattern_str:    str,
-    canonical:      str,
-    text:           str,
-    found:          set,
-    negated:        set,
-    method:         str,
-    methods_used:   set
+    pattern_str: str,
+    canonical:   str,
+    text:        str,
+    found:       set,
+    negated:     set,
+    method:      str,
+    methods_used: set,
 ):
-    """Find pattern in text, classify as found or negated."""
     for match in re.finditer(r'\b' + re.escape(pattern_str) + r'\b', text):
         methods_used.add(method)
         if is_negated(text, match.start()):
@@ -179,21 +186,20 @@ def _check_and_classify(
 
 # ─────────────────────────────────────────────
 # MAIN EXTRACTION — CURRENT MESSAGE ONLY
-# History is handled by ConversationMemory, not here.
+# history param kept for API compatibility but intentionally ignored.
+# History accumulation is done in chatbot.py via merge_memory().
 # ─────────────────────────────────────────────
 def extract_symptoms_with_confidence(text: str, history: list = None) -> Dict:
     """
     Extract symptoms from the CURRENT MESSAGE ONLY.
+
     Returns:
       {
-        "symptoms":   [canonical symptom strings],
-        "negated":    [negated symptom strings],
+        "symptoms":   [str],   # confirmed symptoms
+        "negated":    [str],   # explicitly denied symptoms
         "confidence": float,
-        "methods":    [str]
+        "methods":    [str],
       }
-
-    NOTE: `history` param kept for API compatibility but is intentionally ignored.
-    Memory accumulation is done in chatbot.py via merge_memory().
     """
     found_symptoms   = set()
     negated_symptoms = set()
@@ -211,7 +217,7 @@ def extract_symptoms_with_confidence(text: str, history: list = None) -> Dict:
         _check_and_classify(syn, canonical, text_lower,
                             found_symptoms, negated_symptoms, "synonym", methods_used)
 
-    # 3. Fuzzy match (rapidfuzz optional)
+    # 3. Fuzzy match (optional — requires rapidfuzz)
     if process and fuzz:
         words  = text_lower.split()
         chunks = []
@@ -227,7 +233,6 @@ def extract_symptoms_with_confidence(text: str, history: list = None) -> Dict:
         for chunk, idx in chunks:
             neg = is_negated(text_lower, idx)
 
-            # Against canonical list
             res = process.extractOne(chunk, COMMON_SYMPTOMS, scorer=fuzz.ratio)
             if res and res[1] >= 85:
                 if neg:
@@ -236,7 +241,6 @@ def extract_symptoms_with_confidence(text: str, history: list = None) -> Dict:
                     found_symptoms.add(res[0])
                 methods_used.add("fuzzy")
 
-            # Against synonym keys
             res2 = process.extractOne(chunk, list(SYNONYM_MAP.keys()), scorer=fuzz.ratio)
             if res2 and res2[1] >= 85:
                 canonical = SYNONYM_MAP[res2[0]]
@@ -246,14 +250,11 @@ def extract_symptoms_with_confidence(text: str, history: list = None) -> Dict:
                     found_symptoms.add(canonical)
                 methods_used.add("fuzzy")
 
-    # A symptom cannot be both found and negated in the same message.
-    # Negation wins (safer for medical context).
+    # Negation wins when a symptom appears both ways in the same message
     found_symptoms -= negated_symptoms
 
     symptoms_list = list(found_symptoms)
-
-    # Confidence score
-    confidence = 0.0
+    confidence    = 0.0
     if symptoms_list:
         confidence = 0.5 + (0.1 * len(methods_used)) + (0.05 * min(len(symptoms_list), 4))
         confidence = min(confidence, 1.0)
@@ -282,7 +283,7 @@ def extract_symptoms(text: str, history: list = None) -> List[str]:
 def extract_symptom_details(text: str) -> Dict:
     """
     Extracts structured detail fields from free text.
-    Returns only fields that are actually found (None otherwise).
+    Returns only fields actually found (None otherwise).
     """
     details = {
         "duration":           None,
@@ -300,16 +301,21 @@ def extract_symptom_details(text: str) -> Dict:
     if m:
         details["duration"] = m.group(2)
     else:
-        # Relative: "since this morning", "since yesterday", "since today morning"
+        # Relative: "since this morning", "since today morning", "since yesterday"
         m2 = re.search(
-            r'(since|from)\s+(today|this morning|yesterday|last night|last week|'
-            r'this afternoon|this evening|morning|yesterday night)',
+            r'(since|from)\s+'
+            r'(today|this morning|yesterday|last night|last week|'
+            r'this afternoon|this evening|morning|yesterday night|'
+            r'today morning|today evening|today afternoon)',
             t
         )
         if m2:
             details["duration"] = m2.group(0)
 
     # ── Severity ─────────────────────────────────────────────────────────────
+    # NOTE: "worst" intentionally removed from SEVERITY_HIGH
+    # It causes false positives when users answer comparative questions
+    # e.g. "eating makes it worse" / "worst I've felt" both triggered HIGH urgency
     if any(w in t for w in SEVERITY_HIGH):
         details["severity"] = "high"
     elif any(w in t for w in SEVERITY_MEDIUM):
@@ -317,7 +323,7 @@ def extract_symptom_details(text: str) -> Dict:
     elif any(w in t for w in SEVERITY_LOW):
         details["severity"] = "low"
 
-    # Numeric scale e.g. "7 out of 10", "7/10"
+    # Numeric scale: "7 out of 10", "7/10"
     scale_m = re.search(r'(\d{1,2})\s*(?:/|out of)\s*10', t)
     if scale_m:
         score = int(scale_m.group(1))
@@ -343,10 +349,10 @@ def extract_symptom_details(text: str) -> Dict:
         details["vomiting_frequency"] = freq_m.group(0).strip()
 
     # ── Chills (yes/no answer detection) ─────────────────────────────────────
-    chills_affirmatives = ["yes", "yeah", "experiencing chills", "have chills",
-                           "chills", "shivering", "rigors", "feeling cold"]
     chills_negatives    = ["no chills", "no shivering", "not shivering",
                            "no rigors", "without chills"]
+    chills_affirmatives = ["experiencing chills", "have chills", "chills",
+                           "shivering", "rigors", "feeling cold", "yes"]
     if any(w in t for w in chills_negatives):
         details["chills"] = False
     elif any(w in t for w in chills_affirmatives):
