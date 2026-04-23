@@ -6,7 +6,6 @@ Usage:
 """
 import sys, os
 sys.path.insert(0, "/app")
-os.environ.setdefault("DB_HOST", "db")
 
 from sqlalchemy import text
 from app.db.database import SessionLocal

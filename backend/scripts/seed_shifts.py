@@ -7,7 +7,6 @@ Usage:
 import sys, os
 from datetime import time
 sys.path.insert(0, "/app")
-os.environ.setdefault("DB_HOST", "db")
 
 from app.db.database import SessionLocal
 from app.models.shift import Shift

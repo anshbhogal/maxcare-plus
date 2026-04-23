@@ -11,7 +11,6 @@ Usage (inside hms_backend container):
 import sys, os
 from datetime import datetime, timezone, timedelta
 sys.path.insert(0, "/app")
-os.environ.setdefault("DB_HOST", "db")
 
 from app.db.database import SessionLocal
 from app.models.patient import Patient

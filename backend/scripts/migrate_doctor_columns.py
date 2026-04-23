@@ -4,7 +4,6 @@ docker exec -it hms_backend python3 /app/scripts/migrate_doctor_columns.py
 """
 import sys, os
 sys.path.insert(0, "/app")
-os.environ.setdefault("DB_HOST", "db")
 
 from app.db.database import engine
 from sqlalchemy import text

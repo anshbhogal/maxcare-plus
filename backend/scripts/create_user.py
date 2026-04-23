@@ -13,7 +13,6 @@ If the user already exists, their password_hash is updated.
 """
 import sys, os
 sys.path.insert(0, "/app")
-os.environ.setdefault("DB_HOST", "db")
 
 if len(sys.argv) < 4:
     print(__doc__)

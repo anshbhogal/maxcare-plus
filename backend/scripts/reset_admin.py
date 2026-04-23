@@ -12,7 +12,6 @@ import sys
 import os
 
 sys.path.insert(0, "/app")
-os.environ.setdefault("DB_HOST", "db")
 
 from app.core.security import hash_password
 from app.core.encryption import get_blind_index

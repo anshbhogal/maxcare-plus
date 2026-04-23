@@ -8,13 +8,16 @@ Usage:
   python3 /app/scripts/backup_db.py
 """
 import os
+import sys
 import subprocess
 from datetime import datetime
 
-# Configuration from environment
-DB_USER = os.getenv("DB_USER", "hms_user")
-DB_NAME = os.getenv("DB_NAME", "hms_db")
-DB_HOST = os.getenv("DB_HOST", "db")
+# Ensure we can import from /app
+sys.path.insert(0, "/app")
+from app.core.config import settings
+
+# Configuration
+DATABASE_URL = settings.DATABASE_URL
 BACKUP_DIR = "/app/backups"
 
 def run_backup():
@@ -29,17 +32,13 @@ def run_backup():
     
     # We use pg_dump. In Docker, this script runs in hms_backend,
     # which should have postgresql-client installed.
-    # Note: PGPASSWORD should be set in environment or use a .pgpass file
-    # for non-interactive mode.
+    # pg_dump supports a connection string via the -d flag.
     
     try:
         # Construct the command
-        # We assume PGPASSWORD is available in the environment from docker-compose/env_file
         command = [
             "pg_dump",
-            "-h", DB_HOST,
-            "-U", DB_USER,
-            "-d", DB_NAME,
+            "-d", DATABASE_URL,
             "-f", filepath
         ]
         

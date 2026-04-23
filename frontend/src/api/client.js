@@ -1,6 +1,9 @@
 import axios from 'axios'
 
-const api = axios.create({ baseURL: '/api/v1' })
+const isDev = import.meta.env.DEV
+const baseURL = isDev ? '/api/v1' : 'https://maxcare-plus-backend.onrender.com/api/v1'
+
+const api = axios.create({ baseURL })
 
 // ── Request: attach JWT ───────────────────────────────────────────────────────
 api.interceptors.request.use(

@@ -15,9 +15,12 @@ import os
 import sys
 import subprocess
 
-DB_USER = os.getenv("DB_USER", "hms_user")
-DB_NAME = os.getenv("DB_NAME", "hms_db")
-DB_HOST = os.getenv("DB_HOST", "db")
+# Ensure we can import from /app
+sys.path.insert(0, "/app")
+from app.core.config import settings
+
+# Configuration
+DATABASE_URL = settings.DATABASE_URL
 BACKUP_DIR = "/app/backups"
 
 def run_restore(filename):
@@ -34,20 +37,13 @@ def run_restore(filename):
     
     try:
         # Drop and recreate DB or just clear it
-        # For safety in this script, we'll assume the user wants to restore over the existing structure.
-        # pg_restore -c can clean before restore, but pg_dump SQL files are better run via psql.
+        # psql supports a connection string via the -d flag.
         
-        # PGPASSWORD should be in env
         command = [
             "psql",
-            "-h", DB_HOST,
-            "-U", DB_USER,
-            "-d", DB_NAME,
+            "-d", DATABASE_URL,
             "-f", filepath
         ]
-        
-        # We might need to terminate existing connections
-        # But in dev, we just run the command.
         
         subprocess.run(command, check=True)
         print(f"[+] Restoration completed successfully.")
