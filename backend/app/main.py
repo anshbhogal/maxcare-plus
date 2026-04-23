@@ -4,59 +4,83 @@ from sqlalchemy import text
 import logging
 import os
 
+# ✅ Core imports
 from app.core.config import settings
 from app.api.v1.router import api_router
 from app.db.database import Base, engine
 
+# ✅ IMPORTANT: correct model import (DO NOT use `import app.models`)
+from app import models  # registers models
+
+# ─────────────────────────────────────────────────────────────
+# 🚀 App Initialization
+# ─────────────────────────────────────────────────────────────
 print("🔥 STARTING MAXCARE-PLUS BACKEND")
 print("DATABASE_URL =", os.getenv("DATABASE_URL"))
 
-# ✅ SINGLE app instance
 app = FastAPI(
     title="MaxCare+ Hospital API",
-    version="3.1.0"
+    description="Complete HMS: Patients, Doctors, Appointments, Lab, Pharmacy, IPD",
+    version="3.1.0",
+    docs_url="/docs",
+    redoc_url="/redoc",
 )
 
-# ✅ Root route
-@app.get("/")
-def root():
-    return {"status": "MaxCare-Plus running"}
-
-# ✅ Logging
+# ─────────────────────────────────────────────────────────────
+# 📌 Logging
+# ─────────────────────────────────────────────────────────────
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# ✅ Register models
-import app.models
-
-# ✅ Create tables
+# ─────────────────────────────────────────────────────────────
+# 📌 Database Initialization
+# ─────────────────────────────────────────────────────────────
 Base.metadata.create_all(bind=engine)
 
-# ✅ Migrations
+# Optional lightweight DB check (safe)
 try:
     with engine.connect() as conn:
         conn.execute(text("SELECT 1"))
         conn.commit()
     logger.info("DB connected")
 except Exception as e:
-    logger.warning(f"DB warning: {e}")
+    logger.warning(f"DB connection warning: {e}")
 
-# ✅ CORS (VERY IMPORTANT)
+# ─────────────────────────────────────────────────────────────
+# 🌐 CORS Configuration (VERY IMPORTANT)
+# ─────────────────────────────────────────────────────────────
+origins = [
+    "https://maxcare-plus.onrender.com",  # production frontend
+    "http://localhost:5173",              # local dev
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "https://maxcare-plus.onrender.com",
-        "http://localhost:5173"
-    ],
+    allow_origins=origins,      # or ["*"] for testing only
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# ✅ Router
+# ─────────────────────────────────────────────────────────────
+# 🔌 API Routes
+# ─────────────────────────────────────────────────────────────
 app.include_router(api_router, prefix="/api/v1")
 
-# ✅ Health
+# ─────────────────────────────────────────────────────────────
+# 🏠 Root Endpoint
+# ─────────────────────────────────────────────────────────────
+@app.get("/")
+def root():
+    return {"status": "MaxCare-Plus running"}
+
+# ─────────────────────────────────────────────────────────────
+# ❤️ Health Check (for Render / monitoring)
+# ─────────────────────────────────────────────────────────────
 @app.get("/health")
 def health():
-    return {"status": "ok"}
+    return {
+        "status": "ok",
+        "version": "3.1.0",
+        "env": settings.APP_ENV
+    }
