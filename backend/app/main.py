@@ -1,68 +1,62 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.core.config import settings
-from app.api.v1.router import api_router
-from app.db.database import Base, engine
 from sqlalchemy import text
 import logging
 import os
 
+from app.core.config import settings
+from app.api.v1.router import api_router
+from app.db.database import Base, engine
+
 print("🔥 STARTING MAXCARE-PLUS BACKEND")
 print("DATABASE_URL =", os.getenv("DATABASE_URL"))
 
-logging.basicConfig(level=logging.INFO, format="%(levelname)s:\t  %(message)s")
-logger = logging.getLogger(__name__)
-
-# ✅ SINGLE APP INSTANCE
+# ✅ SINGLE app instance
 app = FastAPI(
     title="MaxCare+ Hospital API",
-    description="Complete HMS: Patients, Doctors, Appointments, Lab, Pharmacy, IPD",
-    version="3.1.0",
-    docs_url="/docs",
-    redoc_url="/redoc",
+    version="3.1.0"
 )
 
-# ✅ CORS (THIS is what fixes your issue)
-origins = [
-    "https://maxcare-plus.onrender.com",
-    "http://localhost:5173",
-]
+# ✅ Root route
+@app.get("/")
+def root():
+    return {"status": "MaxCare-Plus running"}
 
+# ✅ Logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# ✅ Register models
+import app.models
+
+# ✅ Create tables
+Base.metadata.create_all(bind=engine)
+
+# ✅ Migrations
+try:
+    with engine.connect() as conn:
+        conn.execute(text("SELECT 1"))
+        conn.commit()
+    logger.info("DB connected")
+except Exception as e:
+    logger.warning(f"DB warning: {e}")
+
+# ✅ CORS (VERY IMPORTANT)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=[
+        "https://maxcare-plus.onrender.com",
+        "http://localhost:5173"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# ✅ Root endpoint
-@app.get("/")
-def root():
-    return {"status": "MaxCare-Plus running"}
+# ✅ Router
+app.include_router(api_router, prefix="/api/v1")
 
+# ✅ Health
 @app.get("/health")
 def health():
-    return {"status": "ok", "version": "3.1.0", "env": settings.APP_ENV}
-
-# ✅ Register models BEFORE create_all
-import app.models  # noqa
-
-Base.metadata.create_all(bind=engine)
-
-# ✅ Run migrations
-_MIGRATIONS = [
-    # (keep your migration list unchanged)
-]
-
-try:
-    with engine.connect() as conn:
-        for sql in _MIGRATIONS:
-            conn.execute(text(sql))
-        conn.commit()
-    logger.info("DB migrations applied")
-except Exception as e:
-    logger.warning(f"Migration warning (non-fatal): {e}")
-
-# ✅ Include routes
-app.include_router(api_router, prefix="/api/v1")
+    return {"status": "ok"}
